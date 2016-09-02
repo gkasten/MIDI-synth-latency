@@ -1,0 +1,31 @@
+This is a tool for measuring end-to-end MIDI synthesizer latency.
+
+Disclaimer: This is not an official Google product.
+
+It works with any Device Under Test (DUT) including Android and iOS with any
+synthesizer app, Linux, Windows, macOS, and hardware synthesizers which can take
+USB MIDI as input. The only connections which are required is analog audio into
+the Teensy and a USB connection to the DUT. Note that the Teensy is set to
+operate in gadget mode, so mobile devices will require an OTG cable or
+equivalent.
+
+The tool is based on WALT (https://github.com/google/walt) but uses different
+software. The audio portion is the same as WALT, so please refer to the
+schematic provided in the hardware folder of the repo. In addition, it requires
+an I2C controlled LCD such as one that uses a SainsmartLCD2004 controller. This
+is the one that I used:
+https://www.amazon.com/SainSmart-Module-Arduino-Board-White/dp/B003B22UR0.
+Connect SDA0 and SCL0 to the respective pins on the LCD. Also connect these
+signals to 3V3 via a 3.3K pull-up resistor. GND on the LCD connects to GND on
+the Teensy and VCC goes to Vin assuming the Teensy is powered over USB.
+
+See the note in the arduino directory of that repo for help setting up your
+compilation environment.
+
+This tool works by generating MIDI noteOn messages over USB and measuring how
+long it takes for the DUT to produce sound above a certain threshold in
+response. This means that voices using a strong attack such as percussion are
+ideal and the volume on the synthesizer should be set to the maximum level.
+
+The results are summarized on the LCD but exporting of raw data is currently not
+implemented.
